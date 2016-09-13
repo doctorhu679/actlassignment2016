@@ -1,0 +1,10 @@
+#import csv files as data frames and merge together based on "Policy ID"
+file_claim_motorctp <- read.csv("file_claim_motorctp.csv", header=TRUE)
+file_policy_motorctp <-read.csv("file_policy_motorctp.csv", header=TRUE)
+merged_ctp_df <- merge(file_policy_motorctp, file_claim_motorctp, all=TRUE)
+
+merged_ctp_df <- within(merged_ctp_df, {TotalGrossLoss<-GrossLossMotor+GrossLossCTP}) #inserts column to calculate TotalGrossLoss
+
+#remove all rows of data where the GrossLossMotor + GrossLossMotor exceeds the Sum Insured
+ExceedsSumInsured <- subset(merged_ctp_df, TotalGrossLoss>merged_ctp_df$SumInsured)
+merged_ctp_df <- merged_ctp_df[!(merged_ctp_df$PolicyID %in% ExceedsSumInsured$PolicyID),]
