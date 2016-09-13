@@ -1,4 +1,4 @@
-##Data.frame of claims occur after Expiry date, 400 obs,all happened one day after policies failed
+##Data.frame of claims occur after Expiry date, 402 obs,all happened one day after policies failed
 
 Claims_AfterExpiry <- subset(merged_ctp_df, 
                         as.numeric(as.Date(AccidentDay)) 
@@ -8,7 +8,7 @@ Claims_AfterExpiry <- subset(merged_ctp_df,
 
 merged_ctp_df <- merged_ctp_df[!(merged_ctp_df$PolicyID %in% Claims_AfterExpiry$PolicyID),]
 
-##Data.frame of claims occur before Inception date, 3690 obs
+##Data.frame of claims occur before Inception date, 3714 obs
 
 Claims_BeforeInception <- subset(merged_ctp_df, 
                         as.numeric(as.Date(AccidentDay)) 
