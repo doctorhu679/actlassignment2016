@@ -8,3 +8,5 @@ merged_ctp_df <- within(merged_ctp_df, {TotalGrossLoss<-GrossLossMotor+GrossLoss
 #remove all rows of data where the GrossLossMotor + GrossLossMotor exceeds the Sum Insured
 ExceedsSumInsured <- subset(merged_ctp_df, TotalGrossLoss>merged_ctp_df$SumInsured)
 merged_ctp_df <- merged_ctp_df[!(merged_ctp_df$PolicyID %in% ExceedsSumInsured$PolicyID),]
+
+test test changes
