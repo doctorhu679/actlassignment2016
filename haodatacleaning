@@ -1,0 +1,15 @@
+$Data.frame of claims occur after Expiry date, 400 obs
+Claims_AfterExpiry <- subset(merged_ctp_df, 
+                        as.numeric(as.Date(AccidentDay)) 
+                        > as.numeric(as.Date(Expiry)))
+                        
+$Remove claims occur after Expiry date from merged ctp data.frame
+merged_ctp_df <- merged_ctp_df[!(merged_ctp_df$PolicyID %in% Claims_AfterExpiry$PolicyID),]
+
+$Data.frame of claims occur before Inception date, 3690 obs
+Claims_BeforeInception <- subset(merged_ctp_df, 
+                        as.numeric(as.Date(AccidentDay)) 
+                        < as.numeric(as.Date(Inception)))
+                        
+$Remove claims happens before Inception date from merged ctp data.frame,3690 obs, all happened in Nov ,2008
+merged_ctp_df <- merged_ctp_df[!(merged_ctp_df$PolicyID %in% Claims_BeforeInception$PolicyID),]
