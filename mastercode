@@ -1,11 +1,26 @@
-#import csv files as data frames and merge together based on "Policy ID"
-file_claim_motorctp <- read.csv("file_claim_motorctp.csv", header=TRUE)
-file_policy_motorctp <-read.csv("file_policy_motorctp.csv", header=TRUE)
+#import csv files as data frames and merge based on "Policy ID"
+#ctpdata
+file_claim_motorctp <- read.csv("file_claim_motorctp.csv", header=TRUE,stringsAsFactors = FALSE)
+file_policy_motorctp <-read.csv("file_policy_motorctp.csv", header=TRUE, stringsAsFactors = FALSE)
 merged_ctp_df <- merge.data.frame(file_policy_motorctp, file_claim_motorctp, all=TRUE)
+#buildingdata
+file_claim_building <- read.csv("file_claim_building.csv", header=TRUE,stringsAsFactors = FALSE)
+file_policy_building <-read.csv("file_policy_building.csv", header=TRUE, skipNul = TRUE,stringsAsFactors = FALSE)
+merged_building_df <- merge.data.frame(file_policy_building, file_claim_building, all=TRUE)
 
-file_claim_building <- read.csv("file_claim_building.csv", header=TRUE)
-file_policy_building <-read.csv("file_policy_building.csv", header=TRUE, skipNul = TRUE)
-merged_building_df <- merge(file_policy_building, file_claim_building, all=TRUE)
+#convert date values from "character" to "Date" format
+#ctpdata
+merged_ctp_df$AccidentDay <- as.Date(merged_ctp_df$AccidentDay, "%d/%m/%Y")
+merged_ctp_df$Inception <- as.Date(merged_ctp_df$Inception)
+merged_ctp_df$Expiry <- as.Date(merged_ctp_df$Expiry)
+#buildingdata
+merged_building_df$AccidentDay <- as.Date(merged_building_df$AccidentDay, format="%d/%m/%Y")
+merged_building_df$Inception <- as.Date(merged_building_df$Inception)
+merged_building_df$Expiry <- as.Date(merged_building_df$Expiry)
+
+#remove all rows of data where the AccidentDate occurs outside of the insurance period
+OutsidePeriod <- subset(merged_ctp_df, AccidentDay>=(Expiry+1) | AccidentDay<=(Inception-1))
+merged_ctp_df <- merged_ctp_df[!(merged_ctp_df$PolicyID %in% OutsidePeriod$PolicyID),]
 
 merged_ctp_df <- within(merged_ctp_df, {TotalGrossLoss<-GrossLossMotor+GrossLossCTP}) #inserts column to calculate TotalGrossLoss
 
