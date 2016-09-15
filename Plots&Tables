@@ -1,0 +1,10 @@
+# Plotting Age of building against Gross Loss on Building (Dot plot)
+attach(merged_building_df)
+plot(Age, GrossLossBuilding, main = "Age to Gross Loss on building", xlab="Age of Building", ylab="Gross Loss on building")
+
+#creating a two way table between GeoRisk and SocialRisk
+risk <- table(file_policy_building$GeoRisk, file_policy_building$SocRisk)
+risk
+#Kernel Density plot for Age and Gross Loss on Building
+d <- density(merged_building_df$Age)
+plot(d)
