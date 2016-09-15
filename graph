@@ -1,0 +1,3 @@
+#extract months
+Accidentyear <- as.POSIXlt(AccidentDay)
+AccidentDay$year
