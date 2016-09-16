@@ -1,3 +1,8 @@
 #extract months
-Accidentyear <- as.POSIXlt(AccidentDay)
-AccidentDay$year
+b <- as.POSIXct(file_claim_motorctp$AccidentDay)
+c <- as.numeric(format(b, "%m"))
+hist.default(c, breaks=11,col = "red")
+
+#extract years
+b <- as.POSIXct(file_claim_motorctp$AccidentDay)
+d <- as.numeric(format(b, "%Y"))
