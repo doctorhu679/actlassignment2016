@@ -1,16 +1,1 @@
-#extract months
-b <- as.POSIXct(file_claim_motorctp$AccidentDay)
-c <- as.numeric(format(b, "%m"))
 
-#plot
-barplot(table(c))
-
-#extract years
-b <- as.POSIXct(file_claim_motorctp$AccidentDay)
-d <- as.numeric(format(b, "%Y"))
- barplot(table(c))
-
-#save plot 
-jpeg('month_frequency.jpg')
-barplot(table(c),col= "red")
-dev.off()
