@@ -1,1 +1,202 @@
+#Part1, read tables!!!!
+#set working directory
+setwd("~/UNSW/Matlab & R/ACTL1101 Assignment")
 
+#read motorctp claim file
+file_claim_motorctp <- read.csv("file_claim_motorctp.csv", header=TRUE)
+
+#read motorctp policy file
+file_policy_motorctp <-read.csv("file_policy_motorctp.csv", header=TRUE)
+
+#merge two dataframes with all = TRUE
+merged_ctp_df <- merge(file_policy_motorctp, file_claim_motorctp, all=TRUE)
+
+#merge two dataframes with only claims
+merged_ctp_df_claim_only <- merge(file_policy_motorctp, file_claim_motorctp)
+
+#data frame of policies without cliam
+policies_no_claim <- subset(merged_ctp_df, is.na(merged_ctp_df$AccidentDay))
+
+
+
+
+
+
+
+#Part2, plot year frequency graph
+#convert accident day of motorctp claim into dates
+Accident_Date <- as.Date(file_claim_motorctp$AccidentDay)
+
+#extract years from accident days 
+Accident_Year <- format(Accident_Date, "%Y")
+
+#build a accident frequency table of years
+Acc_Year_contigency_table <- table(Accident_Month)
+
+#barplot frequency table of years
+barplot(Acc_Year_contigency_table, main= "Accident in Each Year",
+        xlab = "Years", col= "darkgreen")
+
+#codes to save plot
+jpeg(filename="years_freqency.jpeg")
+barplot(Acc_Year_contigency_table, main= "Accident in Each Year",
+        xlab = "Years", col= "darkgreen")
+dev.off()
+
+
+
+
+#Part3 plot month freq graph
+#convert accident day of motorctp claim into dates
+Accident_Date <- as.Date(file_claim_motorctp$AccidentDay)
+
+#extract months from accident days 
+Accident_Month <- format(Accident_Date, "%m")
+
+#Build a accident frequency table of months
+Acc_Month_contigency_table <- table(Accident_Month)
+
+#barplot frequency table of months
+barplot(Acc_Month_contigency_table, main= "Accident in Each Month",
+        xlab = "Months", col= "darkblue")
+
+#code to save plot
+jpeg(filename="months_freqency.jpeg")
+barplot(Acc_Month_contigency_table, main= "Accident in Each Month",
+        xlab = "Months", col= "darkblue")
+dev.off()
+
+
+
+
+#Par4 plot accidents occurence in EVR levels
+#build a accidents frequency table for EVR levels
+Acc_EVR_freq <- table(merged_ctp_df_claim_only$EVR)
+
+#build a frequency table for EVR levels of all policies
+EVR_freq_all_policies<- table(file_policy_motorctp$EVR)
+
+#accidents occurrence percentage in each EVR levels
+occurrence_ratio_EVR <- Acc_EVR_freq / EVR_freq_all_policies
+
+#barplot frequency table of years
+barplot(occurrence_ratio_EVR, main= "Occurrence Percentage in Each EVR Level",
+        xlab = "EVR Levels", col= "cadetblue3")
+
+#codes to save plot
+jpeg(filename="EVR_occurence.jpeg")
+barplot(occurrence_ratio_EVR, main= "Occurrence Percentage in Each EVR Level",
+        xlab = "EVR Levels", col= "cadetblue3")
+dev.off()
+
+
+
+#Part5 plot accidents freq for licence class
+#build a accidents frequency table for licence classes
+Acc_Licence_freq <- table(merged_ctp_df_claim_only$Licence)
+
+#plot pie chart of accidents of licence classes
+install.packages("plotrix")
+library(plotrix)
+sum(Acc_Licence_freq)
+lbls <- rownames(Acc_Licence_freq)
+pct <- round(Acc_Licence_freq/sum(Acc_Licence_freq)*100)
+lbls <- paste(lbls, pct) 
+lbls <- paste(lbls,"%",sep="") 
+pie3D(Acc_Licence_freq,labels = lbls,explode = 0.1,
+    main="Accident Percentage of Licence Class",cex = 0.8,col=c("darkgreen","darkblue","chartreuse3","cadetblue1"))
+
+#codes to save plot
+jpeg(filename="Accident_Percentage_of_Licence_Class.jpeg")
+pie3D(Acc_Licence_freq,labels = lbls,explode = 0.1,
+      main="Accident Percentage of Licence Class",cex = 0.8,col=c("darkgreen","darkblue","chartreuse3","cadetblue1"))
+
+dev.off()
+
+#Part6 accidents occurence in each licence class
+#build table for frequency of accidents in each licence class
+Acc_Licence_freq <- table(merged_ctp_df_claim_only$Licence)
+
+#build table for number of policies without claim in each licence classs
+No_Acc_Licence <- table(policies_no_claim$Licence)
+
+#bind two tables together
+licence_freq_bind <- rbind(Acc_Licence_freq,No_Acc_Licence)
+
+#plot multiple graph in one window
+par(mfrow=c(2,2))
+
+#select Full licence column
+Full_licence <- licence_freq_bind[,"Full"]
+
+#plot pie plot 
+lbls1 <- c("Accident","No Accident")
+pct <- round(Full_licence/sum(Full_licence)*100)
+lbls1 <- paste(lbls1, pct) 
+lbls1 <- paste(lbls1,"%",sep="") 
+pie(Full_licence,labels = lbls1,
+      main="Accident Percentage of Full Licence Class",col=c("darkgreen","darkblue"))
+
+#select Leanrer licence column
+Learner_licence <- licence_freq_bind[,"Learner"]
+
+#plot pie plot 
+lbls2 <- c("Accident","No Accident")
+pct <- round(Learner_licence/sum(Learner_licence)*100)
+lbls2 <- paste(lbls2, pct) 
+lbls2 <- paste(lbls2,"%",sep="") 
+pie(Learner_licence,labels = lbls2,
+    main="Accident Percentage of Learner Licence Class",col=c("darkgreen","darkblue"))
+
+
+#select Provisional 1 licence column
+P1_licence <- licence_freq_bind[,"Provisional 1"]
+
+#plot pie plot 
+lbls3 <- c("Accident","No Accident")
+pct <- round(P1_licence/sum(P1_licence)*100)
+lbls3 <- paste(lbls3, pct) 
+lbls3 <- paste(lbls3,"%",sep="") 
+pie(P1_licence,labels = lbls3,
+    main="Accident Percentage of Provisional 1 Licence Class",col=c("darkgreen","darkblue"))
+
+
+#select Provisonal 2 licence column
+P2_licence <- licence_freq_bind[,"Provisional 2"]
+
+#plot pie plot 
+lbls4 <- c("Accident","No Accident")
+pct <- round(P2_licence/sum(P2_licence)*100)
+lbls4 <- paste(lbls4, pct) 
+lbls4 <- paste(lbls4,"%",sep="") 
+pie(Learner_licence,labels = lbls4,
+    main="Accident Percentage of P2 Licence Class",col=c("darkgreen","darkblue"))
+
+#save plot
+jpeg(filename = "Acc_percentage_of_licence_class.jpeg")
+par(mfrow=c(2,2))
+lbls1 <- c("Accident","No Accident")
+pct <- round(Full_licence/sum(Full_licence)*100)
+lbls1 <- paste(lbls1, pct) 
+lbls1 <- paste(lbls1,"%",sep="") 
+pie(Full_licence,labels = lbls1,
+    main="Accident Percentage of Full Licence Class",col=c("darkgreen","darkblue"))
+lbls2 <- c("Accident","No Accident")
+pct <- round(Learner_licence/sum(Learner_licence)*100)
+lbls2 <- paste(lbls2, pct) 
+lbls2 <- paste(lbls2,"%",sep="") 
+pie(Learner_licence,labels = lbls2,
+    main="Accident Percentage of Learner Licence Class",col=c("darkgreen","darkblue"))
+lbls3 <- c("Accident","No Accident")
+pct <- round(P1_licence/sum(P1_licence)*100)
+lbls3 <- paste(lbls3, pct) 
+lbls3 <- paste(lbls3,"%",sep="") 
+pie(P1_licence,labels = lbls3,
+    main="Accident Percentage of Provisional 1 Licence Class",col=c("darkgreen","darkblue"))
+lbls4 <- c("Accident","No Accident")
+pct <- round(P2_licence/sum(P2_licence)*100)
+lbls4 <- paste(lbls4, pct) 
+lbls4 <- paste(lbls4,"%",sep="") 
+pie(Learner_licence,labels = lbls4,
+    main="Accident Percentage of P2 Licence Class",col=c("darkgreen","darkblue"))
+dev.off()
