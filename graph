@@ -31,7 +31,7 @@ Accident_Date <- as.Date(file_claim_motorctp$AccidentDay)
 Accident_Year <- format(Accident_Date, "%Y")
 
 #build a accident frequency table of years
-Acc_Year_contigency_table <- table(Accident_Month)
+Acc_Year_contigency_table <- table(Accident_Year)
 
 #barplot frequency table of years
 barplot(Acc_Year_contigency_table, main= "Accident in Each Year",
