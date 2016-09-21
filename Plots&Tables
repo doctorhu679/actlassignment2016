@@ -1,3 +1,15 @@
+file_claim_building <- read.csv("~/Documents/Code/file_claim_building.csv")
+View(file_claim_building)
+file_policy_building <- read.csv("~/Documents/Code/file_policy_building.csv") 
+View(file_policy_building)
+
+merged_building_df <- merge.data.frame(file_policy_building, file_claim_building, all=TRUE)
+policy.claim <- merge.data.frame(file_policy_building, file_claim_building, all=FALSE)
+
+merged_building_df$AccidentDay <- as.Date(merged_building_df$AccidentDay, format="%d/%m/%Y")
+merged_building_df$Inception <- as.Date(merged_building_df$Inception)
+merged_building_df$Expiry <- as.Date(merged_building_df$Expiry)
+
 # Plotting Age of building against Gross Loss on Building (Dot plot)
 attach(merged_building_df)
 plot(Age, GrossLossBuilding, main = "Age to Gross Loss on building", xlab="Age of Building", ylab="Gross Loss on building")
@@ -5,6 +17,24 @@ plot(Age, GrossLossBuilding, main = "Age to Gross Loss on building", xlab="Age o
 #creating a two way table between GeoRisk and SocialRisk
 risk <- table(file_policy_building$GeoRisk, file_policy_building$SocRisk)
 risk
-#Kernel Density plot for Age and Gross Loss on Building
-d <- density(merged_building_df$Age)
-plot(d)
+
+policy.claim.ALL <- merge(file_policy_building, file_claim_building)
+#removing all null values
+merged_building_df_claims <- merge.data.frame(file_policy_building, file_claim_building, all = FALSE)
+
+#viewing only GrossLoss on building for specific age group 
+(NO TREND WAS FOUND)
+Age.group.all[[11]][[8]]
+#finding mean of the gross loss on building for specific age group
+mean(Age.group.all[[11]][[8]])
+quantile(Age.group.all[[6]][[8]], probs=1:10/10)
+#quantile 
+quantile(Age.group.all[[6]][[8]], probs = 1:10/10)
+
+#average of grosslossBuilding for categories of  geo risk risk 
+aggregate(GrossLossBuilding~GeoRisk, policy.claim, mean)
+aggdata<- aggregate(GrossLossBuilding~GeoRisk, policy.claim, mean)
+
+#average of grosslossBuilding for categories of  social risk risk
+aggregate(GrossLossBuilding~SocRisk, policy.claim, mean)
+
