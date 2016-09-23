@@ -22,27 +22,34 @@ policy.claim.ALL <- merge(file_policy_building, file_claim_building)
 #removing all null values
 merged_building_df_claims <- merge.data.frame(file_policy_building, file_claim_building, all = FALSE)
 
-#viewing only GrossLoss on building for specific age group 
-(NO TREND WAS FOUND)
-Age.group.all[[11]][[8]]
-#finding mean of the gross loss on building for specific age group
-mean(Age.group.all[[11]][[8]])
-quantile(Age.group.all[[6]][[8]], probs=1:10/10)
-#quantile 
-quantile(Age.group.all[[6]][[8]], probs = 1:10/10)
-
 #average of grosslossBuilding for categories of  geo risk risk 
 aggregate(GrossLossBuilding~GeoRisk, policy.claim, mean)
 aggGeo<- aggregate(GrossLossBuilding~GeoRisk, policy.claim, mean)
+barplot(aggGeo$GrossLossBuilding, names= aggGeo$GeoRisk, xlab = "GeoRisk", ylab = "Average Gross Loss on Building", main= "GeoRisk & GrossLossBuilding", col="red")
+
 
 #average of grosslossBuilding for categories of  social risk risk
 aggregate(GrossLossBuilding~SocRisk, policy.claim, mean)
 aggSoc <- aggregate(GrossLossBuilding~SocRisk, policy.claim, mean)
-
-#bar plot of GeoRisk vs GrossLossBuilding
-barplot(aggGeo$GrossLossBuilding, names= aggGeo$GeoRisk, xlab = "GeoRisk", ylab = "Average Gross Loss on Building", main= "GeoRisk & GrossLossBuilding", col="red")
-
-#bar plot of SocRisk vs GrossLossBuilding
 barplot(aggSoc$GrossLossBuilding, names= aggSoc$SocRisk, xlab = "SocRisk", ylab = "Average Gross Loss on Building", main= "SocRisk & GrossLossBuilding")
+
+
+#Age and Gross Loss on Building  
+aggregate(GrossLossBuilding~Age, policy.claim, mean)
+aggAge <- aggregate(GrossLossBuilding~Age, policy.claim, mean)
+barplot(aggAge$GrossLossBuilding, names = aggAge$Age, xlab = "Age", ylab = "Average Gross Loss on Building", main = "Age & GrossLossBuilding")
+
+#Age & GeoRisk 
+aggregate(Age~GeoRisk, policy.claim, length)
+aggAgeGeo <- aggregate(Age~GeoRisk, policy.claim, length )
+barplot(aggAgeGeo$Age, names = aggAgeGeo$GeoRisk, xlab = "GeoRisk", ylab = "Age", main = "Age & Geo Risk")
+
+#Age & SocRisk
+aggregate(Age~SocRisk, policy.claim, length )
+aggAgeSoc <- aggregate(Age~SocRisk, policy.claim,length )
+barplot(aggAgeSoc$Age, names = aggAgeSoc$SocRisk, xlab = "SocRisk", ylab = "Age", main = "Age & Social Risk")
+
+merge(aggSoc, aggGeo, all=TRUE)
+merged_Soc_Geo <- merge(aggSoc, aggGeo, all=TRUE)
 
 
