@@ -33,8 +33,16 @@ quantile(Age.group.all[[6]][[8]], probs = 1:10/10)
 
 #average of grosslossBuilding for categories of  geo risk risk 
 aggregate(GrossLossBuilding~GeoRisk, policy.claim, mean)
-aggdata<- aggregate(GrossLossBuilding~GeoRisk, policy.claim, mean)
+aggGeo<- aggregate(GrossLossBuilding~GeoRisk, policy.claim, mean)
 
 #average of grosslossBuilding for categories of  social risk risk
 aggregate(GrossLossBuilding~SocRisk, policy.claim, mean)
+aggSoc <- aggregate(GrossLossBuilding~SocRisk, policy.claim, mean)
+
+#bar plot of GeoRisk vs GrossLossBuilding
+barplot(aggGeo$GrossLossBuilding, names= aggGeo$GeoRisk, xlab = "GeoRisk", ylab = "Average Gross Loss on Building", main= "GeoRisk & GrossLossBuilding", col="red")
+
+#bar plot of SocRisk vs GrossLossBuilding
+barplot(aggSoc$GrossLossBuilding, names= aggSoc$SocRisk, xlab = "SocRisk", ylab = "Average Gross Loss on Building", main= "SocRisk & GrossLossBuilding")
+
 
