@@ -1,6 +1,0 @@
-claim <- read.csv("file_claim_motorctp.csv", header=TRUE)
-policy <-read.csv("file_policy_motorctp.csv", header=TRUE)
-claim_sample <- head(claim)
-policy_sample <- head (policy)
-mergedmotorctp <- merge(file_policy_motorctp, file_claim_motorctp, all=TRUE)
-mergedmotorctp_sample<- merge(claim_sample, policy_sample,all =TRUE)
