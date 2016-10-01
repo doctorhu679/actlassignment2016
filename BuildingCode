@@ -1,0 +1,52 @@
+file_claim_building <- read.csv("~/Documents/Code/file_claim_building.csv")
+View(file_claim_building)
+file_policy_building <- read.csv("~/Documents/Code/file_policy_building.csv") 
+View(file_policy_building)
+
+merged_building_df <- merge.data.frame(file_policy_building, file_claim_building, all=TRUE)
+policy.claim <- merge.data.frame(file_policy_building, file_claim_building, all=FALSE)
+
+merged_building_df$AccidentDay <- as.Date(merged_building_df$AccidentDay, format="%d/%m/%Y")
+merged_building_df$Inception <- as.Date(merged_building_df$Inception)
+merged_building_df$Expiry <- as.Date(merged_building_df$Expiry)
+
+#find sum, mean and quartiles for GrossLossBuildings
+GLB <- policy.claim$GrossLossBuilding
+sum(GLB)
+mean(GLB)
+quantile(GLB)
+
+#average of grosslossBuilding for categories of  geo risk risk 
+aggregate(GrossLossBuilding~GeoRisk, policy.claim, mean)
+aggGeo<- aggregate(GrossLossBuilding~GeoRisk, policy.claim, mean)
+barplot(aggGeo$GrossLossBuilding, names= aggGeo$GeoRisk, xlab = "Geographic Risk", 
+ylab = "Average Gross Loss on Building", main= "Geographic Risk & Average Gross Loss on Building",
+col="orange", ylim=c(0,3000))
+
+
+#average of grosslossBuilding for categories of  social risk risk
+aggregate(GrossLossBuilding~SocRisk, policy.claim, mean)
+aggSoc <- aggregate(GrossLossBuilding~SocRisk, policy.claim, mean)
+barplot(aggSoc$GrossLossBuilding, names= aggSoc$SocRisk, xlab = "Social Risk",
+ylab = "Average Gross Loss on Building", main= "Social Risk & Average Gross Loss on Building", 
+col="orange", ylim=c(0,3000))
+
+
+#Age and Gross Loss on Building  
+aggregate(GrossLossBuilding~Age, policy.claim, mean)
+aggAge <- aggregate(GrossLossBuilding~Age, policy.claim, mean)
+barplot(aggAge$GrossLossBuilding, names = aggAge$Age, xlab = "Age", 
+ylab = "Average Gross Loss on Building", main = "Age & Average Gross Loss on Building",col = "orange",
+ylim=c(0,5000), grid on)
+
+merge(aggSoc, aggGeo, all=TRUE)
+merged_Soc_Geo <- merge(aggSoc, aggGeo, all=TRUE)
+
+
+#PART 4 counting number of claims per policy
+Cl.ID<- table(policy.claim$PolicyID)
+No.Cl.ID<- table(Cl.ID)
+#Plot
+plot(No.Cl.ID, type = "l")
+#Probability of making certain no. of claims per policy
+Prb.No.Cl.ID <- No.Cl.ID/sum(No.Cl.ID)
